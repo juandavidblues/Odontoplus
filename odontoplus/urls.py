@@ -13,10 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path,include
-from odontoplus.core.views import index,login
+from django.views.generic.base import RedirectView
+
 urlpatterns = [
-    path('', index, name='index'),
-    path('$', login, name='login')
+    path('core/', include('odontoplus.core.urls')),
+    path('', RedirectView.as_view(url='core/'))
 ]

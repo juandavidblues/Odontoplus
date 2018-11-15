@@ -7,6 +7,8 @@ def index(request):
     return HttpResponse('hola mundo')
 
 def login(request):
-    return HttpResponse('aqui te logueas mamaguevo')
+    if request.POST:
+        print('hola')
+    return render(request,'core/login.html',{})
 
 # Create your views here.
