@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.urls import path,include
-from odontoplus.core.views import index,login
+from odontoplus.core.views import index,login,users
 
 urlpatterns = [
     path('', index, name='index'),
-    path('login', login, name='login')
+    path('login', login, name='login'),
+    path('users', users, name='users')
 ]
