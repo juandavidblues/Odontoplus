@@ -3,6 +3,47 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as login_django
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
+
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
+from django.views.generic.edit import UpdateView
+from django.views.generic.edit import DeleteView
+
+from odontoplus.core.models import User
+
+class UserDetailView(DetailView):
+    model = User
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class UserListView(ListView):
+    model = User
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context)
+        context['users'] = User.objects.all()
+        return context
+
+class UserCreateView(CreateView):
+    model = User
+    success_url = reverse_lazy('list')
+    fields = ['username','email','password']
+    print(super(CreateView,self).get_context_data())
+
+class UserUpdateView(UpdateView):
+    model = User
+    success_url = reverse_lazy('list')
+    fields = ['username','email','password']
+    template_name_suffix = '_update_form'
+
+class UserDeleteView(DeleteView):
+    model = User
+    success_url = reverse_lazy('list')
+    fields = ['username','email','password']
+    template_name_suffix = '_confirm_delete'
 
 @login_required
 def index(request):
