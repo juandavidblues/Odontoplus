@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as login_django
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.forms import ModelForm
 
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -14,7 +15,33 @@ from django.views.generic.edit import DeleteView
 from odontoplus.core.models import User
 from django import forms
 
-class UserFrom()
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Field, Button
+from crispy_forms.bootstrap import FieldWithButtons,StrictButton,FormActions
+
+class UserFrom(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserFrom, self).__init__(*args, **kwargs)
+        #self.fields['username'].widget.attrs.update({'class':'col-md-4'})
+        #self.fields['email'].widget.attrs.update({'class':'col-md-4'})
+        #self.fields['password'].widget.attrs.update({'class':'col-md-4'})
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'Nuevo Usuario',
+                Field('username',css_class='col-md-4'),
+                Field('email',css_class='col-md-4'),
+                Field('password')
+            ),
+            ButtonHolder(
+                Submit('submit', 'Guardar', css_class='button white'),
+                Button('cancel','Cancelar')
+            )
+        )
+    class Meta:
+        model = User
+        fields = ['username','email','password']
+
 
 class UserDetailView(DetailView):
     model = User
@@ -26,23 +53,21 @@ class UserListView(ListView):
     model = User
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
         context['users'] = User.objects.all()
         return context
 
 class UserCreateView(CreateView):
     model = User
     success_url = reverse_lazy('list')
-    fields = ['username','email','password']
+    form_class = UserFrom
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
         return context
 
 class UserUpdateView(UpdateView):
     model = User
     success_url = reverse_lazy('list')
-    fields = ['username','email','password']
+    form_class = UserFrom
     template_name_suffix = '_update_form'
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
