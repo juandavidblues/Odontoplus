@@ -35,7 +35,7 @@ def login(request):
     })
 
 @login_required
-def users(request):
+def users_index(request):
     from odontoplus.core.models import User
     users =  User.objects.all()
     return render(request,'core/users.html',{
@@ -45,3 +45,6 @@ def users(request):
 @login_required
 def panel_control(request):
     return HttpResponse('')
+
+@login_required
+def create_view(request):
