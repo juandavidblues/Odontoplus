@@ -12,6 +12,9 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 
 from odontoplus.core.models import User
+from django import forms
+
+class UserFrom()
 
 class UserDetailView(DetailView):
     model = User
@@ -31,13 +34,19 @@ class UserCreateView(CreateView):
     model = User
     success_url = reverse_lazy('list')
     fields = ['username','email','password']
-    print(super(CreateView,self).get_context_data())
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context)
+        return context
 
 class UserUpdateView(UpdateView):
     model = User
     success_url = reverse_lazy('list')
     fields = ['username','email','password']
     template_name_suffix = '_update_form'
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 class UserDeleteView(DeleteView):
     model = User
