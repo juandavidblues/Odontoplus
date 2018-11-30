@@ -4,44 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as login_django
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.forms import ModelForm
 
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
-from django.views.generic.edit import UpdateView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import CreateView,UpdateView,DeleteView
 
+from odontoplus.core.forms import UserFrom
 from odontoplus.core.models import User
-from django import forms
-
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Field, Button
-from crispy_forms.bootstrap import FieldWithButtons,StrictButton,FormActions
-
-class UserFrom(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(UserFrom, self).__init__(*args, **kwargs)
-        #self.fields['username'].widget.attrs.update({'class':'col-md-4'})
-        #self.fields['email'].widget.attrs.update({'class':'col-md-4'})
-        #self.fields['password'].widget.attrs.update({'class':'col-md-4'})
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Fieldset(
-                'Nuevo Usuario',
-                Field('username',css_class='col-md-4'),
-                Field('email',css_class='col-md-4'),
-                Field('password')
-            ),
-            ButtonHolder(
-                Submit('submit', 'Guardar', css_class='button white'),
-                Button('cancel','Cancelar')
-            )
-        )
-    class Meta:
-        model = User
-        fields = ['username','email','password']
-
 
 class UserDetailView(DetailView):
     model = User
@@ -60,8 +29,12 @@ class UserCreateView(CreateView):
     model = User
     success_url = reverse_lazy('list')
     form_class = UserFrom
+    verbose_name = 'Crear'
+    model_name = 'Usuarios'
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
+        context['view_name'] = self.verbose_name
+        context['model'] = self.model_name
         return context
 
 class UserUpdateView(UpdateView):
@@ -69,8 +42,12 @@ class UserUpdateView(UpdateView):
     success_url = reverse_lazy('list')
     form_class = UserFrom
     template_name_suffix = '_update_form'
+    verbose_name = 'Editar'
+    model_name = 'Usuarios'
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
+        context['view_name'] = self.verbose_name
+        context['model'] = self.model_name
         return context
 
 class UserDeleteView(DeleteView):
@@ -116,10 +93,3 @@ def users_index(request):
     return render(request,'core/users.html',{
         'users':users
     })
-
-@login_required
-def panel_control(request):
-    return HttpResponse('')
-
-@login_required
-def create_view(request):

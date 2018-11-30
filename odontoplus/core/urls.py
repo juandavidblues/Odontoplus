@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,include
-from odontoplus.core.views import index,login,users,UserDetailView,UserListView,UserCreateView,UserUpdateView,UserDeleteView
+from odontoplus.core.views import index,login,UserDetailView,UserListView,UserCreateView,UserUpdateView,UserDeleteView
 
 urlpatterns = [
     path('', index, name='index'),
