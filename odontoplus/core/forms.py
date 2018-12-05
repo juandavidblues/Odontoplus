@@ -65,6 +65,14 @@ class UserFrom(ModelForm):
                 Button('cancel','Cancelar')
             )
         )
+        self.fields['password'] = forms.CharField(widget=forms.PasswordInput)
+
+    def save(self, *args, **kwargs):
+        self.instance.set_password(self.instance.password)
+        return super(UserFrom, self).save(*args, **kwargs)
+
     class Meta:
         model = User
         fields = ['username','identification','email','password','address','position','phone','mobile']
+    
+    
