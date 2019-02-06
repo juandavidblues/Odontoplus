@@ -18,5 +18,6 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('core/', include('odontoplus.core.urls')),
+    path('event/', include('odontoplus.event.urls')),
     path('', RedirectView.as_view(url='core/'))
 ]
